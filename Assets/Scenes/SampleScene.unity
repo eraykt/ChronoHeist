@@ -742,7 +742,6 @@ MonoBehaviour:
   _nodeDataSo: {fileID: 11400000, guid: 94a6301a544acf24a961d4a4506c33b2, type: 2}
   _cellSize: 1
   _startOffset: {x: 0, y: 0}
-  _container: {fileID: 8949683}
   _circlePrefab: {fileID: 3616790444919095323, guid: 5b7a965fc337b8547b61297b8922c419, type: 3}
   _linePrefab: {fileID: 3657394502764866042, guid: abbcebe8021c4a444bd5a682013ce42a, type: 3}
 --- !u!4 &1533565312

@@ -11,11 +11,9 @@ namespace ChronoHeist.Core
 
         [Header("Settings")]
         [SerializeField]
-        private float _cellSize = 1f; // Oyun dünyasında kareler arası boşluk
+        private float _cellSize = 1f;
         [SerializeField]
-        private Vector2 _startOffset = Vector2.zero; // Gridin başlama pozisyonu
-        [SerializeField]
-        private Transform _container;
+        private Vector2 _startOffset = Vector2.zero;
 
         [Header("Prefabs")]
         [SerializeField]
@@ -35,7 +33,7 @@ namespace ChronoHeist.Core
             }
             else
             {
-                Debug.LogError("GridManager: NodeDataSO is missing!");
+                Logger.Error(this, "Node Data SO is null");
             }
         }
 
@@ -43,7 +41,6 @@ namespace ChronoHeist.Core
         {
             InitializeRuntimeGrid();
 
-            // 2. Şimdi gridi gez ve objeleri oluştur
             for (int x = 0; x < _nodeDataSo.width; x++)
             {
                 for (int y = 0; y < _nodeDataSo.height; y++)
@@ -78,12 +75,12 @@ namespace ChronoHeist.Core
 
             if (type == CellType.Circle)
             {
-                instance = Instantiate(_circlePrefab, position, Quaternion.identity, _container);
+                instance = Instantiate(_circlePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Circle_{x}_{y}";
             }
             else if (type == CellType.Line)
             {
-                instance = Instantiate(_linePrefab, position, Quaternion.identity, _container);
+                instance = Instantiate(_linePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Line_{x}_{y}";
 
                 float angle = GetSmartAngle(x, y);
