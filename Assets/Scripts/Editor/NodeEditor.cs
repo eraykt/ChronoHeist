@@ -36,7 +36,15 @@ public class NodeEditor : EditorWindow
             gridHeight = EditorGUILayout.IntField(gridHeight, EditorStyles.toolbarTextField, GUILayout.Width(40));
             GUILayout.Label("y", EditorStyles.miniLabel);
 
-            if (GUILayout.Button("Reset", EditorStyles.toolbarButton)) gridData = new CellType[gridWidth, gridHeight];
+            if (GUILayout.Button("Reset", EditorStyles.toolbarButton))
+            {
+                gridData = new CellType[gridWidth, gridHeight];
+                float calculatedWidth = (gridWidth * cellSize) + 40;
+                float calculatedHeight = (gridHeight * cellSize) + 40 + 25;
+                Vector2 newSize = new Vector2(calculatedWidth, calculatedHeight);
+                this.minSize = newSize;
+                this.maxSize = newSize;
+            }
             if (GUILayout.Button("Save", EditorStyles.toolbarButton)) SaveLevel();
             if (GUILayout.Button("Load", EditorStyles.toolbarButton)) LoadLevel();
         }
