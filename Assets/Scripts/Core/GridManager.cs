@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ChronoHeist.Node;
 using UnityEngine;
 
@@ -25,6 +26,8 @@ namespace ChronoHeist.Core
 
         private readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
 
+        private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
+
         private void Start()
         {
             if (_nodeDataSo != null)
@@ -39,6 +42,8 @@ namespace ChronoHeist.Core
 
         private void GenerateGrid()
         {
+            _nodeLookup.Clear();
+
             InitializeRuntimeGrid();
 
             for (int x = 0; x < _nodeDataSo.width; x++)
@@ -46,6 +51,57 @@ namespace ChronoHeist.Core
                 for (int y = 0; y < _nodeDataSo.height; y++)
                 {
                     SpawnCell(x, y);
+                }
+            }
+
+            ConnectNodesDfs();
+        }
+
+        private void ConnectNodesDfs()
+        {
+            foreach (var kvp in _nodeLookup)
+            {
+                Vector2Int index = kvp.Key;
+                GameNode node = kvp.Value;
+
+                foreach (Vector2Int dir in _directions)
+                {
+                    TraceAndConnect(node, index, dir);
+                }
+            }
+        }
+
+        private void TraceAndConnect(GameNode node, Vector2Int index, Vector2Int dir)
+        {
+            Vector2Int current = index + dir;
+            
+            while (IsInside(current.x, current.y))
+            {
+                CellType cell = _runtimeGrid[current.x, current.y];
+
+                switch (cell)
+                {
+                    case CellType.Empty:
+                        return;
+
+                    case CellType.Circle:
+                        if (_nodeLookup.TryGetValue(current, out GameNode neighbor))
+                        {
+                            if (!node.neighbors.Contains(neighbor))
+                            {
+                                node.neighbors.Add(neighbor);
+                            }
+
+                            if (!neighbor.neighbors.Contains(node))
+                            {
+                                neighbor.neighbors.Add(node);
+                            }
+                        }
+                        return;
+
+                    case CellType.Line:
+                        current += dir;
+                        continue;
                 }
             }
         }
@@ -58,7 +114,7 @@ namespace ChronoHeist.Core
             {
                 int x = i / _nodeDataSo.width;
                 int y = i % _nodeDataSo.height;
-            
+
                 _runtimeGrid[x, y] = _nodeDataSo.cellContainer[i];
             }
         }
@@ -70,13 +126,19 @@ namespace ChronoHeist.Core
             if (type == CellType.Empty) return;
 
             Vector3 position = new Vector3(x * _cellSize, 0.1f, y * _cellSize).ConvertVector() + (Vector3)_startOffset;
-            
+
             GameObject instance = null;
 
             if (type == CellType.Circle)
             {
                 instance = Instantiate(_circlePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Circle_{x}_{y}";
+
+                GameNode node = instance.GetComponent<GameNode>();
+                Vector2Int index = new Vector2Int(x, y);
+
+                node.index = index;
+                _nodeLookup.Add(index, node);
             }
             else if (type == CellType.Line)
             {
