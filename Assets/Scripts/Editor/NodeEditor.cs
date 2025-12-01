@@ -14,13 +14,6 @@ public class NodeEditor : EditorWindow
     private CellType[,] gridData;
     private NodeDataSO currentLevelData;
 
-    private readonly Vector2Int[] directions = {
-        Vector2Int.up, 
-        Vector2Int.down, 
-        Vector2Int.left, 
-        Vector2Int.right
-    };
-
     [MenuItem("Tools/My Level Editor")]
     public static void ShowWindow()
     {
@@ -124,7 +117,7 @@ public class NodeEditor : EditorWindow
                 break;
 
             case CellType.Line:
-                float angle = GetSmartAngle(x, y);
+                float angle = CHRLibrary.GetLineAngel(x, y, gridWidth, gridHeight, gridData);
 
                 Matrix4x4 originalMatrix = GUI.matrix;
                 GUIUtility.RotateAroundPivot(angle, cellRect.center);
@@ -174,27 +167,6 @@ public class NodeEditor : EditorWindow
             }
         }
     }
-
-    private float GetSmartAngle(int x, int y)
-    {
-        foreach (var dir in directions) // check circle first 
-        {
-            int cx = x + dir.x;
-            int cy = y + dir.y;
-            if (IsInside(cx, cy) && gridData[cx, cy] == CellType.Circle)
-                return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        }
-        foreach (var dir in directions) // than check line
-        {
-            int cx = x + dir.x;
-            int cy = y + dir.y;
-            if (IsInside(cx, cy) && gridData[cx, cy] == CellType.Line)
-                return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        }
-        return 0f;
-    }
-
-    private bool IsInside(int x, int y) => x >= 0 && x < gridWidth && y >= 0 && y < gridHeight;
 
     private void SaveLevel()
     {

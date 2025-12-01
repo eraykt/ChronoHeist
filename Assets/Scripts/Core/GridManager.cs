@@ -24,8 +24,6 @@ namespace ChronoHeist.Core
 
         private CellType[,] _runtimeGrid;
 
-        private readonly Vector2Int[] _directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
 
         private void Start()
@@ -64,7 +62,7 @@ namespace ChronoHeist.Core
                 Vector2Int index = kvp.Key;
                 GameNode node = kvp.Value;
 
-                foreach (Vector2Int dir in _directions)
+                foreach (Vector2Int dir in CHRLibrary.Directions)
                 {
                     TraceAndConnect(node, index, dir);
                 }
@@ -74,8 +72,8 @@ namespace ChronoHeist.Core
         private void TraceAndConnect(GameNode node, Vector2Int index, Vector2Int dir)
         {
             Vector2Int current = index + dir;
-            
-            while (IsInside(current.x, current.y))
+
+            while (CHRLibrary.IsInsideGrid(current.x, current.y, _nodeDataSo.width, _nodeDataSo.height))
             {
                 CellType cell = _runtimeGrid[current.x, current.y];
 
@@ -145,39 +143,11 @@ namespace ChronoHeist.Core
                 instance = Instantiate(_linePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Line_{x}_{y}";
 
-                float angle = GetSmartAngle(x, y);
+                float angle = CHRLibrary.GetLineAngel(x, y, _nodeDataSo.width, _nodeDataSo.height, _runtimeGrid);
                 instance.transform.rotation = Quaternion.Euler(0, angle, 0);
             }
         }
 
-        private float GetSmartAngle(int x, int y)
-        {
-            foreach (var dir in _directions)
-            {
-                int cx = x + dir.x;
-                int cy = y + dir.y;
-                if (IsInside(cx, cy) && _runtimeGrid[cx, cy] == CellType.Circle)
-                {
-                    return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                }
-            }
-
-            foreach (var dir in _directions)
-            {
-                int cx = x + dir.x;
-                int cy = y + dir.y;
-                if (IsInside(cx, cy) && _runtimeGrid[cx, cy] == CellType.Line)
-                {
-                    return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-                }
-            }
-            return 0f;
-        }
-
-        private bool IsInside(int x, int y)
-        {
-            return x >= 0 && x < _nodeDataSo.width && y >= 0 && y < _nodeDataSo.height;
-        }
 
         private void OnDrawGizmos()
         {
