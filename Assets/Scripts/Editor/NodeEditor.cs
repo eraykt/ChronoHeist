@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 
 using System.Collections.Generic;
+using ChronoHeist.Node;
 using UnityEngine;
 using UnityEditor;
 
@@ -13,7 +14,12 @@ public class NodeEditor : EditorWindow
     private CellType[,] gridData;
     private NodeDataSO currentLevelData;
 
-    private readonly Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+    private readonly Vector2Int[] directions = {
+        Vector2Int.up, 
+        Vector2Int.down, 
+        Vector2Int.left, 
+        Vector2Int.right
+    };
 
     [MenuItem("Tools/My Level Editor")]
     public static void ShowWindow()
@@ -247,8 +253,8 @@ public class NodeEditor : EditorWindow
 
         for (int i = 0; i < loadedLevel.cellContainer.Count; i++)
         {
-            int x = i % gridWidth;
-            int y = i / gridWidth;
+            int x = i / gridWidth;
+            int y = i % gridHeight;
             
             gridData[x, y] = loadedLevel.cellContainer[i];
         }
