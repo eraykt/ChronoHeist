@@ -8,8 +8,8 @@ namespace ChronoHeist.Input
         private InputSystem_Actions _input;
 
         public System.Action clickEvent;
-        
-        private void OnEnable()
+
+        public void Initialize()
         {
             _input = new InputSystem_Actions();
 
@@ -33,15 +33,20 @@ namespace ChronoHeist.Input
 
         private void OnDisable()
         {
-            _input.Game.Disable();
-            _input.UI.Disable();
+            if (_input != null)
+            {
+                _input.Game.Disable();
+                _input.UI.Disable();
+                _input.Dispose();
+                _input = null;
+            }
         }
 
         public Vector2 GetMousePosition()
         {
             return Mouse.current.position.ReadValue();
         }
-        
+
         public void OnSelect(InputAction.CallbackContext context)
         {
             if (context.performed)
@@ -49,7 +54,7 @@ namespace ChronoHeist.Input
                 clickEvent?.Invoke();
             }
         }
-        
+
         public void OnNewaction(InputAction.CallbackContext context)
         {
             throw new System.NotImplementedException();

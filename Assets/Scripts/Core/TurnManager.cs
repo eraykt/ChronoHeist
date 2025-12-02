@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using ChronoHeist.Node;
 using ChronoHeist.Player;
 
@@ -17,13 +17,46 @@ namespace ChronoHeist.Core
         public TurnState CurrentState { get; private set; }
 
         private PlayerController _currentPlayer;
+        
+        private List<GameNode> _highlightedNodes = new List<GameNode>();
 
         private void Start()
         {
-            _currentPlayer = GridManager.Instance.Player;
+            EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
+            EventManager.RegisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);
+        }
+        
+        private void OnGridGenerationFinished(EventManager.OnGridGenerationFinished obj)
+        {
             CurrentState = TurnState.PlayerTurn;
-
+            HighlightAvailableMoves();
             Logger.Info(this, "Game Started. Player's turn");
+        }
+
+        private void OnPlayerInitialized(EventManager.OnPlayerInitialized obj)
+        {
+            _currentPlayer = obj.player;
+        }
+        
+        private void HighlightAvailableMoves()
+        {
+            ClearHighlights();
+
+            foreach (GameNode node in _currentPlayer.CurrentNode.neighbors)
+            {
+                node.SetHighlight(true);
+                _highlightedNodes.Add(node);
+            }
+        }
+        
+        private void ClearHighlights()
+        {
+            foreach (var node in _highlightedNodes)
+            {
+                node.SetHighlight(false);
+            }
+            
+            _highlightedNodes.Clear();
         }
 
         public void OnNodeInteracted(GameNode targetNode)
@@ -31,11 +64,6 @@ namespace ChronoHeist.Core
             if (CurrentState != TurnState.PlayerTurn)
             {
                 return;
-            }
-
-            if (!_currentPlayer)
-            {
-                _currentPlayer = GridManager.Instance.Player;
             }
 
             if (IsValidMove(targetNode))
@@ -49,6 +77,7 @@ namespace ChronoHeist.Core
         {
             Logger.Success(this, "Player Moved");
             ChangeState(TurnState.PlayerTurn);
+            HighlightAvailableMoves();
         }
 
         private bool IsValidMove(GameNode target)

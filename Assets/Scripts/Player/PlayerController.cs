@@ -11,6 +11,8 @@ namespace ChronoHeist.Player
         {
             CurrentNode = startingNode;
             transform.position = new Vector3(startingNode.transform.position.x, 0.0f, startingNode.transform.position.z);
+            
+            EventManager.TriggerEvent(new EventManager.OnPlayerInitialized(this));
         }
 
         public void MoveToNode(GameNode targetNode, System.Action onMoveEnded = null)

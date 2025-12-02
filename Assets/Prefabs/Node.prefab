@@ -48,6 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: {x: 0, y: 0}
   neighbors: []
+  _renderer: {fileID: 172039472402665989}
+  _defaultColor: {r: 0, g: 0, b: 0, a: 1}
+  _highlightColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!135 &1570850576112478478
 SphereCollider:
   m_ObjectHideFlags: 0

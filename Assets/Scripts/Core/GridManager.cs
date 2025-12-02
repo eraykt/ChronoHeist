@@ -27,8 +27,6 @@ namespace ChronoHeist.Core
 
         private Transform _gridContainer;
         
-        public PlayerController Player { get; private set; }
-        
         private GridCellData[,] _runtimeGrid;
 
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
@@ -63,6 +61,8 @@ namespace ChronoHeist.Core
             }
 
             ConnectNodesDfs();
+            
+            EventManager.TriggerEvent(new EventManager.OnGridGenerationFinished());
         }
 
         private void ConnectNodesDfs()
@@ -159,8 +159,8 @@ namespace ChronoHeist.Core
 
             if (_runtimeGrid[x,y].ContainsContent(CellContent.PlayerSpawn))
             {
-                Player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
-                Player.Initialize(instance?.GetComponent<GameNode>());
+                var player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
+                player.Initialize(instance?.GetComponent<GameNode>());
             }
         }
 
