@@ -11,7 +11,6 @@ namespace ChronoHeist.Node
 
     public enum CellContent
     {
-        None,
         PlayerSpawn,
         EnemySpawn
     }
@@ -21,5 +20,26 @@ namespace ChronoHeist.Node
     {
         public CellStructure Structure = CellStructure.Empty;
         public List<CellContent> Contents = new List<CellContent>();
+        
+        public bool ContainsContent(CellContent content)
+        {
+            return Contents.Contains(content);
+        }
+
+        public void AddContent(CellContent content)
+        {
+            if (!ContainsContent(content))
+            {
+                Contents.Add(content);
+            }
+        }
+
+        public void RemoveContent(CellContent content)
+        {
+            if (Contents.Contains(content))
+            {
+                Contents.Remove(content);
+            }
+        }
     }
 }

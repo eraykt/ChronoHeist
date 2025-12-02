@@ -15,51 +15,103 @@ MonoBehaviour:
   width: 10
   height: 10
   cellContainer:
+  - Structure: 1
+    Contents: 00000000
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
   - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
     Contents: 01000000
   - Structure: 0
-    Contents: 02000000
-  - Structure: 0
-    Contents: 0200000001000000
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
     Contents: 
   - Structure: 0
     Contents: 
   - Structure: 0
     Contents: 
   - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
     Contents: 
   - Structure: 2
     Contents: 
@@ -69,13 +121,7 @@ MonoBehaviour:
     Contents: 
   - Structure: 0
     Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
   - Structure: 0
     Contents: 
@@ -83,7 +129,9 @@ MonoBehaviour:
     Contents: 
   - Structure: 2
     Contents: 
-  - Structure: 2
+  - Structure: 0
+    Contents: 
+  - Structure: 0
     Contents: 
   - Structure: 2
     Contents: 
@@ -93,13 +141,7 @@ MonoBehaviour:
     Contents: 
   - Structure: 0
     Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
   - Structure: 0
     Contents: 
@@ -107,7 +149,33 @@ MonoBehaviour:
     Contents: 
   - Structure: 2
     Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
   - Structure: 2
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 1
+    Contents: 01000000
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 1
+    Contents: 01000000
+  - Structure: 0
+    Contents: 
+  - Structure: 0
+    Contents: 
+  - Structure: 2
+    Contents: 
+  - Structure: 0
     Contents: 
   - Structure: 2
     Contents: 
@@ -119,99 +187,31 @@ MonoBehaviour:
     Contents: 
   - Structure: 0
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
   - Structure: 0
     Contents: 
   - Structure: 0
     Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
   - Structure: 0
     Contents: 
   - Structure: 1
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
+  - Structure: 1
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
+  - Structure: 2
     Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
-    Contents: 
-  - Structure: 0
+  - Structure: 1
     Contents: 
