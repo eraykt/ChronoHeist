@@ -8,6 +8,6 @@ namespace ChronoHeist.Node
         public int width;
         public int height;
 
-        public List<CellType> cellContainer;
+        public List<GridCellData> cellContainer;
     }
 }

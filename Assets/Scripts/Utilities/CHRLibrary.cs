@@ -22,13 +22,14 @@ public static class CHRLibrary
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public static float GetLineAngel(int x, int y, int width, int height, CellType[,] gridData)
+    public static float GetLineAngel(int x, int y, int width, int height, GridCellData[,] gridData)
     {
-        foreach (var dir in Directions)
+        foreach (var dir in Directions) 
         {
             int cx = x + dir.x;
             int cy = y + dir.y;
-            if (IsInsideGrid(cx, cy, width, height) && gridData[cx, cy] == CellType.Circle)
+        
+            if (IsInsideGrid(cx, cy, width, height) && gridData[cx, cy].Structure == CellStructure.Node)
             {
                 return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             }
@@ -38,7 +39,7 @@ public static class CHRLibrary
         {
             int cx = x + dir.x;
             int cy = y + dir.y;
-            if (IsInsideGrid(cx, cy, width, height) && gridData[cx, cy] == CellType.Line)
+            if (IsInsideGrid(cx, cy, width, height) && gridData[cx, cy].Structure == CellStructure.Line)
             {
                 return Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             }

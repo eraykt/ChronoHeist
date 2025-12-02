@@ -11,7 +11,7 @@ public class NodeEditor : EditorWindow
     private int gridHeight = 10;
     private float cellSize = 30f;
 
-    private CellType[,] gridData;
+    private GridCellData[,] gridData;
     private NodeDataSO currentLevelData;
 
     [MenuItem("Tools/My Level Editor")]
@@ -22,8 +22,25 @@ public class NodeEditor : EditorWindow
 
     private void OnEnable()
     {
-        if (gridData == null) gridData = new CellType[gridWidth, gridHeight];
+        InitializeGridData();
     }
+
+    private void InitializeGridData(bool force = false)
+    {
+        if (gridData == null || gridData.GetLength(0) != gridWidth || gridData.GetLength(1) != gridHeight || force)
+        {
+            gridData = new GridCellData[gridWidth, gridHeight];
+
+            for (int x = 0; x < gridWidth; x++)
+            {
+                for (int y = 0; y < gridHeight; y++)
+                {
+                    gridData[x, y] = new GridCellData();
+                }
+            }
+        }
+    }
+
 
     private void OnGUI()
     {
@@ -37,7 +54,7 @@ public class NodeEditor : EditorWindow
 
             if (GUILayout.Button("Reset", EditorStyles.toolbarButton))
             {
-                gridData = new CellType[gridWidth, gridHeight];
+                InitializeGridData(true);
                 float calculatedWidth = (gridWidth * cellSize) + 40;
                 float calculatedHeight = (gridHeight * cellSize) + 40 + 25;
                 Vector2 newSize = new Vector2(calculatedWidth, calculatedHeight);
@@ -49,10 +66,7 @@ public class NodeEditor : EditorWindow
         }
         GUILayout.EndHorizontal();
 
-        if (gridData == null || gridData.GetLength(0) != gridWidth || gridData.GetLength(1) != gridHeight)
-        {
-            gridData = new CellType[gridWidth, gridHeight];
-        }
+        InitializeGridData();
 
         Rect workArea = GUILayoutUtility.GetRect(
             (gridWidth * cellSize) + 40, (gridHeight * cellSize) + 40,
@@ -107,16 +121,16 @@ public class NodeEditor : EditorWindow
 
     private void GenerateCellVisual(int x, int y, Rect cellRect)
     {
-        CellType type = gridData[x, y];
+        CellStructure type = gridData[x, y].Structure;
 
         switch (type)
         {
-            case CellType.Circle:
+            case CellStructure.Node:
                 Handles.color = Color.green;
                 Handles.DrawSolidDisc(cellRect.center, Vector3.forward, cellSize * 0.35f);
                 break;
 
-            case CellType.Line:
+            case CellStructure.Line:
                 float angle = CHRLibrary.GetLineAngel(x, y, gridWidth, gridHeight, gridData);
 
                 Matrix4x4 originalMatrix = GUI.matrix;
@@ -146,21 +160,21 @@ public class NodeEditor : EditorWindow
             {
                 if (e.type == EventType.MouseDown && e.button == 0)
                 {
-                    gridData[x, y] = (gridData[x, y] == CellType.Circle) ? CellType.Empty : CellType.Circle;
+                    gridData[x, y].Structure = (gridData[x, y].Structure == CellStructure.Node) ? CellStructure.Empty : CellStructure.Node;
                     e.Use();
                     Repaint();
                 }
 
                 if ((e.type == EventType.MouseDrag || e.type == EventType.MouseDown) && e.button == 1)
                 {
-                    gridData[x, y] = CellType.Line;
+                    gridData[x, y].Structure = CellStructure.Line;
                     e.Use();
                     Repaint();
                 }
 
                 if ((e.type == EventType.MouseDrag || e.type == EventType.MouseDown) && e.button == 2)
                 {
-                    gridData[x, y] = CellType.Empty;
+                    gridData[x, y].Structure = CellStructure.Empty;
                     e.Use();
                     Repaint();
                 }
@@ -182,7 +196,7 @@ public class NodeEditor : EditorWindow
         NodeDataSO data = CreateInstance<NodeDataSO>();
         data.width = gridWidth;
         data.height = gridHeight;
-        data.cellContainer = new List<CellType>(gridWidth * gridHeight);
+        data.cellContainer = new List<GridCellData>(gridWidth * gridHeight);
 
         for (int x = 0; x < gridWidth; x++)
         {
@@ -201,7 +215,7 @@ public class NodeEditor : EditorWindow
         Logger.Success(this, "New level node has been saved successfully!");
         GUIUtility.ExitGUI();
     }
-    
+
     private void LoadLevel()
     {
         string path = EditorUtility.OpenFilePanel("Load Level", "Assets/Level Data", "asset");
@@ -209,7 +223,7 @@ public class NodeEditor : EditorWindow
         if (string.IsNullOrEmpty(path)) return;
 
         string relativePath = FileUtil.GetProjectRelativePath(path);
-        
+
         NodeDataSO loadedLevel = AssetDatabase.LoadAssetAtPath<NodeDataSO>(relativePath);
         if (loadedLevel == null)
         {
@@ -218,19 +232,19 @@ public class NodeEditor : EditorWindow
         }
 
         currentLevelData = loadedLevel;
-        
+
         gridWidth = loadedLevel.width;
         gridHeight = loadedLevel.height;
-        gridData = new CellType[gridWidth, gridHeight];
+        gridData = new GridCellData[gridWidth, gridHeight];
 
         for (int i = 0; i < loadedLevel.cellContainer.Count; i++)
         {
             int x = i / gridWidth;
             int y = i % gridHeight;
-            
+
             gridData[x, y] = loadedLevel.cellContainer[i];
         }
-        
+
         Repaint();
         Logger.Success(this, "Level has been loaded successfully!");
     }

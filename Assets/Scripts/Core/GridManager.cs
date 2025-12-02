@@ -22,7 +22,7 @@ namespace ChronoHeist.Core
         [SerializeField]
         private GameObject _linePrefab;
 
-        private CellType[,] _runtimeGrid;
+        private GridCellData[,] _runtimeGrid;
 
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
 
@@ -75,14 +75,14 @@ namespace ChronoHeist.Core
 
             while (CHRLibrary.IsInsideGrid(current.x, current.y, _nodeDataSo.width, _nodeDataSo.height))
             {
-                CellType cell = _runtimeGrid[current.x, current.y];
+                CellStructure cell = _runtimeGrid[current.x, current.y].Structure;
 
                 switch (cell)
                 {
-                    case CellType.Empty:
+                    case CellStructure.Empty:
                         return;
 
-                    case CellType.Circle:
+                    case CellStructure.Node:
                         if (_nodeLookup.TryGetValue(current, out GameNode neighbor))
                         {
                             if (!node.neighbors.Contains(neighbor))
@@ -97,7 +97,7 @@ namespace ChronoHeist.Core
                         }
                         return;
 
-                    case CellType.Line:
+                    case CellStructure.Line:
                         current += dir;
                         continue;
                 }
@@ -106,7 +106,7 @@ namespace ChronoHeist.Core
 
         private void InitializeRuntimeGrid()
         {
-            _runtimeGrid = new CellType[_nodeDataSo.width, _nodeDataSo.height];
+            _runtimeGrid = new GridCellData[_nodeDataSo.width, _nodeDataSo.height];
 
             for (int i = 0; i < _nodeDataSo.cellContainer.Count; i++)
             {
@@ -119,15 +119,15 @@ namespace ChronoHeist.Core
 
         private void SpawnCell(int x, int y)
         {
-            CellType type = _runtimeGrid[x, y];
+            CellStructure structure = _runtimeGrid[x, y].Structure;
 
-            if (type == CellType.Empty) return;
+            if (structure == CellStructure.Empty) return;
 
             Vector3 position = new Vector3(x * _cellSize, 0.1f, y * _cellSize).ConvertVector() + (Vector3)_startOffset;
 
             GameObject instance = null;
 
-            if (type == CellType.Circle)
+            if (structure == CellStructure.Node)
             {
                 instance = Instantiate(_circlePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Circle_{x}_{y}";
@@ -138,7 +138,7 @@ namespace ChronoHeist.Core
                 node.index = index;
                 _nodeLookup.Add(index, node);
             }
-            else if (type == CellType.Line)
+            else if (structure == CellStructure.Line)
             {
                 instance = Instantiate(_linePrefab, position, Quaternion.identity, transform);
                 instance.name = $"Line_{x}_{y}";
