@@ -20,7 +20,7 @@ namespace ChronoHeist.Core
         
         private List<GameNode> _highlightedNodes = new List<GameNode>();
 
-        private void Start()
+        private void OnEnable()
         {
             EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
             EventManager.RegisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);
@@ -88,6 +88,12 @@ namespace ChronoHeist.Core
         private void ChangeState(TurnState newState)
         {
             CurrentState = newState;
+        }
+
+        private void OnDisable()
+        {
+            EventManager.DeregisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
+            EventManager.DeregisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);
         }
     }
 }

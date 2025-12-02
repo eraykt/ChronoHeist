@@ -17,7 +17,7 @@ namespace ChronoHeist.Core
 
         private void OnEnable()
         {
-            _input.Initialize();
+            _input.EnableInput();
             _input.clickEvent += HandleClick;
         }
         

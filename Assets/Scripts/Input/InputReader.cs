@@ -9,12 +9,30 @@ namespace ChronoHeist.Input
 
         public System.Action clickEvent;
 
-        public void Initialize()
+        public void OnEnable()
+        {
+            if (!Application.isPlaying) return;
+
+            if (!InputIsValid())
+            {
+                CreateInput();
+            }
+        }
+
+        private void CreateInput()
         {
             _input = new InputSystem_Actions();
-
             _input.Game.SetCallbacks(this);
             _input.UI.SetCallbacks(this);
+            SetGameInput();
+        }
+
+        public void EnableInput()
+        {
+            if (!InputIsValid())
+            {
+                CreateInput();
+            }
 
             SetGameInput();
         }
@@ -30,18 +48,7 @@ namespace ChronoHeist.Input
             _input.UI.Enable();
             _input.Game.Disable();
         }
-
-        private void OnDisable()
-        {
-            if (_input != null)
-            {
-                _input.Game.Disable();
-                _input.UI.Disable();
-                _input.Dispose();
-                _input = null;
-            }
-        }
-
+        
         public Vector2 GetMousePosition()
         {
             return Mouse.current.position.ReadValue();
@@ -58,6 +65,29 @@ namespace ChronoHeist.Input
         public void OnNewaction(InputAction.CallbackContext context)
         {
             throw new System.NotImplementedException();
+        }
+        
+        private bool InputIsValid()
+        {
+            return _input != null;
+        }
+
+        private void DisableInput()
+        {
+            if (_input != null)
+            {
+                _input.Game.Disable();
+                _input.UI.Disable();
+                _input.Dispose();
+                _input = null;
+            }
+        }
+        
+        private void OnDisable()
+        {
+            if (!Application.isPlaying) return;
+
+            DisableInput();
         }
     }
 }
