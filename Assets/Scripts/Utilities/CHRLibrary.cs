@@ -22,7 +22,7 @@ public static class CHRLibrary
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    public static float GetLineAngel(int x, int y, int width, int height, GridCellData[,] gridData)
+    public static float GetLineAngle(int x, int y, int width, int height, GridCellData[,] gridData)
     {
         foreach (var dir in Directions) 
         {

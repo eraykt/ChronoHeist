@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ChronoHeist.Node;
+using ChronoHeist.Player;
 using UnityEngine;
 
 namespace ChronoHeist.Core
@@ -21,7 +22,13 @@ namespace ChronoHeist.Core
         private GameObject _circlePrefab;
         [SerializeField]
         private GameObject _linePrefab;
+        [SerializeField]
+        private GameObject _playerPrefab;
 
+        private Transform _gridContainer;
+        
+        public PlayerController Player { get; private set; }
+        
         private GridCellData[,] _runtimeGrid;
 
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
@@ -44,6 +51,9 @@ namespace ChronoHeist.Core
 
             InitializeRuntimeGrid();
 
+            GameObject gridContainer = new GameObject("GridContainer");
+            _gridContainer = gridContainer.transform;
+            
             for (int x = 0; x < _nodeDataSo.width; x++)
             {
                 for (int y = 0; y < _nodeDataSo.height; y++)
@@ -129,8 +139,8 @@ namespace ChronoHeist.Core
 
             if (structure == CellStructure.Node)
             {
-                instance = Instantiate(_circlePrefab, position, Quaternion.identity, transform);
-                instance.name = $"Circle_{x}_{y}";
+                instance = Instantiate(_circlePrefab, position, Quaternion.identity, _gridContainer);
+                instance.name = $"Node_{x}_{y}";
 
                 GameNode node = instance.GetComponent<GameNode>();
                 Vector2Int index = new Vector2Int(x, y);
@@ -140,11 +150,17 @@ namespace ChronoHeist.Core
             }
             else if (structure == CellStructure.Line)
             {
-                instance = Instantiate(_linePrefab, position, Quaternion.identity, transform);
+                instance = Instantiate(_linePrefab, position, Quaternion.identity, _gridContainer);
                 instance.name = $"Line_{x}_{y}";
 
-                float angle = CHRLibrary.GetLineAngel(x, y, _nodeDataSo.width, _nodeDataSo.height, _runtimeGrid);
+                float angle = CHRLibrary.GetLineAngle(x, y, _nodeDataSo.width, _nodeDataSo.height, _runtimeGrid);
                 instance.transform.rotation = Quaternion.Euler(0, angle, 0);
+            }
+
+            if (_runtimeGrid[x,y].ContainsContent(CellContent.PlayerSpawn))
+            {
+                Player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
+                Player.Initialize(instance?.GetComponent<GameNode>());
             }
         }
 

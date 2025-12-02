@@ -168,7 +168,7 @@ public class NodeEditor : EditorWindow
                 break;
 
             case CellStructure.Line:
-                float angle = CHRLibrary.GetLineAngel(x, y, _gridWidth, _gridHeight, _gridData);
+                float angle = CHRLibrary.GetLineAngle(x, y, _gridWidth, _gridHeight, _gridData);
 
                 Matrix4x4 originalMatrix = GUI.matrix;
                 GUIUtility.RotateAroundPivot(angle, cellRect.center);

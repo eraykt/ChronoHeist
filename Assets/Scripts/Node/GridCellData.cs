@@ -2,19 +2,6 @@ using System.Collections.Generic;
 
 namespace ChronoHeist.Node
 {
-    public enum CellStructure
-    {
-        Empty,
-        Node,
-        Line
-    }
-
-    public enum CellContent
-    {
-        PlayerSpawn,
-        EnemySpawn
-    }
-
     [System.Serializable]
     public class GridCellData
     {
@@ -42,4 +29,19 @@ namespace ChronoHeist.Node
             }
         }
     }
+    
+    public enum CellStructure
+    {
+        Empty,
+        Node,
+        Line
+    }
+
+    public enum CellContent
+    {
+        PlayerSpawn,
+        EnemySpawn
+    }
+
+    
 }
