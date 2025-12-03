@@ -21,7 +21,7 @@ namespace ChronoHeist.Core
 
         private List<GameNode> _highlightedNodes = new List<GameNode>();
 
-        private void OnEnable()
+        public override void InitializeManager()
         {
             EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
             EventManager.RegisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);

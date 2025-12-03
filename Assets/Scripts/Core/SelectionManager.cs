@@ -7,18 +7,19 @@ namespace ChronoHeist.Core
 {
     public class SelectionManager : Manager<SelectionManager>
     {
+        [Header("Input")]
         [SerializeField]
         private InputReader _input;
 
+        [Header("Raycast Settings")]
         [SerializeField]
         private LayerMask _nodeLayer;
 
         [SerializeField]
         private Camera _mainCamera;
 
-        private void OnEnable()
+        public override void InitializeManager()
         {
-            _input.EnableInput();
             _input.GameActions.Select.performed += HandleClick;
         }
         

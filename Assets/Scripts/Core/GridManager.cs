@@ -31,7 +31,7 @@ namespace ChronoHeist.Core
 
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
 
-        private void Start()
+        public override void InitializeManager()
         {
             if (_nodeDataSo != null)
             {
@@ -42,7 +42,7 @@ namespace ChronoHeist.Core
                 Logger.Error(this, "Node Data SO is null");
             }
         }
-
+        
         private void GenerateGrid()
         {
             _nodeLookup.Clear();

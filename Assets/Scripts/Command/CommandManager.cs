@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ChronoHeist.Command;
 using ChronoHeist.Input;
@@ -14,11 +13,11 @@ namespace ChronoHeist.Core
         
         private Stack<ICommand> _commandHistory = new Stack<ICommand>();
 
-        private void Start()
+        public override void InitializeManager()
         {
             _input.GameActions.Undo.performed += HandleUndo;
         }
-
+        
         public void ExecuteCommand(ICommand command)
         {
             command.Execute();

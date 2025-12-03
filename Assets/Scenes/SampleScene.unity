@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 320262873}
+  - component: {fileID: 320262878}
   - component: {fileID: 320262877}
   - component: {fileID: 320262876}
   - component: {fileID: 320262875}
@@ -218,6 +219,25 @@ MonoBehaviour:
   _circlePrefab: {fileID: 3616790444919095323, guid: 5b7a965fc337b8547b61297b8922c419, type: 3}
   _linePrefab: {fileID: 3657394502764866042, guid: abbcebe8021c4a444bd5a682013ce42a, type: 3}
   _playerPrefab: {fileID: 3885908360478149637, guid: 51c596e668178c948b32870e53141f35, type: 3}
+--- !u!114 &320262878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320262872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047ef83bc4d822c4a9ec14c47866f69a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mode: 1
+  _input: {fileID: 11400000, guid: 3c23b19250cee014e934ded5c8d91b94, type: 2}
+  _managersToInitialize:
+  - {fileID: 320262874}
+  - {fileID: 320262876}
+  - {fileID: 320262875}
+  - {fileID: 320262877}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0

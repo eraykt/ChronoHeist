@@ -1,6 +1,11 @@
 using UnityEngine;
 
-public abstract class Manager<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class Manager : MonoBehaviour
+{
+    public abstract void InitializeManager();
+}
+
+public abstract class Manager<T> : Manager where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
 
