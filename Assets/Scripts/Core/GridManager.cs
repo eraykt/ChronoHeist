@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChronoHeist.Enemy;
 using ChronoHeist.Node;
 using ChronoHeist.Player;
 using UnityEngine;
@@ -24,6 +25,8 @@ namespace ChronoHeist.Core
         private GameObject _linePrefab;
         [SerializeField]
         private GameObject _playerPrefab;
+        [SerializeField]
+        private GameObject _enemyPrefab;
 
         private Transform _gridContainer;
         
@@ -157,10 +160,20 @@ namespace ChronoHeist.Core
                 instance.transform.rotation = Quaternion.Euler(0, angle, 0);
             }
 
-            if (_runtimeGrid[x,y].ContainsContent(CellContent.PlayerSpawn))
+            if (_runtimeGrid[x,y].Contents.Count > 0)
             {
-                var player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
-                player.Initialize(instance?.GetComponent<GameNode>());
+                if (_runtimeGrid[x,y].ContainsContent(CellContent.PlayerSpawn))
+                {
+                    var player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
+                    player.Initialize(instance?.GetComponent<GameNode>());
+                }
+
+                if (_runtimeGrid[x,y].ContainsContent(CellContent.EnemySpawn))
+                {
+                    var enemy = Instantiate(_enemyPrefab).GetComponent<EnemyController>();
+                    enemy.Initialize(instance?.GetComponent<GameNode>());
+                    TurnManager.Instance.RegisterEnemy(enemy);
+                }
             }
         }
 

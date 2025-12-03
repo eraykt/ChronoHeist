@@ -1,7 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using ChronoHeist.Command;
+using ChronoHeist.Enemy;
 using ChronoHeist.Node;
 using ChronoHeist.Player;
+using UnityEngine;
 
 namespace ChronoHeist.Core
 {
@@ -18,6 +21,7 @@ namespace ChronoHeist.Core
         public TurnState CurrentState { get; private set; }
 
         private PlayerController _currentPlayer;
+        private List<EnemyController> _enemyList = new List<EnemyController>();
 
         private List<GameNode> _highlightedNodes = new List<GameNode>();
 
@@ -25,6 +29,11 @@ namespace ChronoHeist.Core
         {
             EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
             EventManager.RegisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);
+        }
+
+        public void RegisterEnemy(EnemyController enemy)
+        {
+            _enemyList.Add(enemy);
         }
 
         private void OnGridGenerationFinished(EventManager.OnGridGenerationFinished obj)
@@ -85,6 +94,30 @@ namespace ChronoHeist.Core
         private void OnPlayerMoveCompleted()
         {
             Logger.Success(this, "Player Moved");
+            ClearHighlights();
+            ChangeState(TurnState.EnemyTurn);
+
+            StartCoroutine(ProcessEnemyTurns());
+
+            //ChangeState(TurnState.PlayerTurn);
+            //HighlightAvailableMoves();
+        }
+        
+        private IEnumerator ProcessEnemyTurns()
+        {
+            foreach (EnemyController enemy in _enemyList)
+            {
+                if (enemy == null) continue;
+
+                bool enemyFinished = false;
+                
+                enemy.StartTurn(_currentPlayer.CurrentNode, () => enemyFinished = true);
+
+                yield return new WaitUntil(() => enemyFinished);
+
+                yield return new WaitForSeconds(1.0f);
+            }
+            
             ChangeState(TurnState.PlayerTurn);
             HighlightAvailableMoves();
         }
