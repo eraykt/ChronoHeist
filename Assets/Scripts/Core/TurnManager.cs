@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ChronoHeist.Command;
 using ChronoHeist.Node;
 using ChronoHeist.Player;
 
@@ -17,7 +18,7 @@ namespace ChronoHeist.Core
         public TurnState CurrentState { get; private set; }
 
         private PlayerController _currentPlayer;
-        
+
         private List<GameNode> _highlightedNodes = new List<GameNode>();
 
         private void OnEnable()
@@ -25,7 +26,7 @@ namespace ChronoHeist.Core
             EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
             EventManager.RegisterEvent<EventManager.OnGridGenerationFinished>(OnGridGenerationFinished);
         }
-        
+
         private void OnGridGenerationFinished(EventManager.OnGridGenerationFinished obj)
         {
             CurrentState = TurnState.PlayerTurn;
@@ -37,7 +38,7 @@ namespace ChronoHeist.Core
         {
             _currentPlayer = obj.player;
         }
-        
+
         private void HighlightAvailableMoves()
         {
             ClearHighlights();
@@ -48,14 +49,14 @@ namespace ChronoHeist.Core
                 _highlightedNodes.Add(node);
             }
         }
-        
+
         private void ClearHighlights()
         {
             foreach (var node in _highlightedNodes)
             {
                 node.SetHighlight(false);
             }
-            
+
             _highlightedNodes.Clear();
         }
 
@@ -69,7 +70,15 @@ namespace ChronoHeist.Core
             if (IsValidMove(targetNode))
             {
                 ChangeState(TurnState.Execution);
-                _currentPlayer.MoveToNode(targetNode, OnPlayerMoveCompleted);
+
+                ICommand moveCommand = new MoveCommand(
+                    _currentPlayer,
+                    _currentPlayer.CurrentNode,
+                    targetNode,
+                    OnPlayerMoveCompleted
+                );
+
+                CommandManager.Instance.ExecuteCommand(moveCommand);
             }
         }
 

@@ -1,6 +1,7 @@
 using ChronoHeist.Input;
 using ChronoHeist.Node;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace ChronoHeist.Core
 {
@@ -18,10 +19,10 @@ namespace ChronoHeist.Core
         private void OnEnable()
         {
             _input.EnableInput();
-            _input.clickEvent += HandleClick;
+            _input.GameActions.Select.performed += HandleClick;
         }
         
-        private void HandleClick()
+        private void HandleClick(InputAction.CallbackContext callbackContext)
         {
             Vector2 mousePos = _input.GetMousePosition();
             Ray ray = _mainCamera.ScreenPointToRay(mousePos);
@@ -38,7 +39,7 @@ namespace ChronoHeist.Core
         
         private void OnDisable()
         {
-            _input.clickEvent -= HandleClick;
+            _input.GameActions.Select.performed -= HandleClick;
         }
     }
 }

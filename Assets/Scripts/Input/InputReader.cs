@@ -3,12 +3,13 @@ using UnityEngine.InputSystem;
 
 namespace ChronoHeist.Input
 {
-    public class InputReader : ScriptableObject, InputSystem_Actions.IGameActions, InputSystem_Actions.IUIActions
+    public class InputReader : ScriptableObject
     {
         private InputSystem_Actions _input;
 
-        public System.Action clickEvent;
-
+        public InputSystem_Actions.GameActions GameActions => _input.Game;
+        public InputSystem_Actions.UIActions UIActions => _input.UI;
+        
         public void OnEnable()
         {
             if (!Application.isPlaying) return;
@@ -22,8 +23,6 @@ namespace ChronoHeist.Input
         private void CreateInput()
         {
             _input = new InputSystem_Actions();
-            _input.Game.SetCallbacks(this);
-            _input.UI.SetCallbacks(this);
             SetGameInput();
         }
 
@@ -52,19 +51,6 @@ namespace ChronoHeist.Input
         public Vector2 GetMousePosition()
         {
             return Mouse.current.position.ReadValue();
-        }
-
-        public void OnSelect(InputAction.CallbackContext context)
-        {
-            if (context.performed)
-            {
-                clickEvent?.Invoke();
-            }
-        }
-
-        public void OnNewaction(InputAction.CallbackContext context)
-        {
-            throw new System.NotImplementedException();
         }
         
         private bool InputIsValid()

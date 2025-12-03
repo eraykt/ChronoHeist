@@ -102,6 +102,15 @@ namespace ChronoHeist.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Undo"",
+                    ""type"": ""Button"",
+                    ""id"": ""1fee6a99-283d-4070-9acd-02a335ab95a4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -113,6 +122,17 @@ namespace ChronoHeist.Input
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Select"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c49dbb26-3989-4fb3-a13d-c21a2ac2242f"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Undo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -213,6 +233,7 @@ namespace ChronoHeist.Input
             // Game
             m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
             m_Game_Select = m_Game.FindAction("Select", throwIfNotFound: true);
+            m_Game_Undo = m_Game.FindAction("Undo", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -298,6 +319,7 @@ namespace ChronoHeist.Input
         private readonly InputActionMap m_Game;
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
         private readonly InputAction m_Game_Select;
+        private readonly InputAction m_Game_Undo;
         /// <summary>
         /// Provides access to input actions defined in input action map "Game".
         /// </summary>
@@ -313,6 +335,10 @@ namespace ChronoHeist.Input
             /// Provides access to the underlying input action "Game/Select".
             /// </summary>
             public InputAction @Select => m_Wrapper.m_Game_Select;
+            /// <summary>
+            /// Provides access to the underlying input action "Game/Undo".
+            /// </summary>
+            public InputAction @Undo => m_Wrapper.m_Game_Undo;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -342,6 +368,9 @@ namespace ChronoHeist.Input
                 @Select.started += instance.OnSelect;
                 @Select.performed += instance.OnSelect;
                 @Select.canceled += instance.OnSelect;
+                @Undo.started += instance.OnUndo;
+                @Undo.performed += instance.OnUndo;
+                @Undo.canceled += instance.OnUndo;
             }
 
             /// <summary>
@@ -356,6 +385,9 @@ namespace ChronoHeist.Input
                 @Select.started -= instance.OnSelect;
                 @Select.performed -= instance.OnSelect;
                 @Select.canceled -= instance.OnSelect;
+                @Undo.started -= instance.OnUndo;
+                @Undo.performed -= instance.OnUndo;
+                @Undo.canceled -= instance.OnUndo;
             }
 
             /// <summary>
@@ -564,6 +596,13 @@ namespace ChronoHeist.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnSelect(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Undo" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnUndo(InputAction.CallbackContext context);
         }
         /// <summary>
         /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
