@@ -8,7 +8,7 @@ namespace ChronoHeist.Node
         public Vector2Int index;
         
         public List<GameNode> neighbors = new List<GameNode>();
-        
+
         [Header("Visuals")]
         [SerializeField]
         private Renderer _renderer;

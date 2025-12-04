@@ -11,9 +11,12 @@ namespace ChronoHeist.Command
             _commands.Add(command);
         }
         
-        public void Execute()
+        public void Execute(bool replay)
         {
-                
+            for (int i = 0; i < _commands.Count; i++)
+            {
+                _commands[i].Execute(replay);
+            }
         }
         
         public void Undo()

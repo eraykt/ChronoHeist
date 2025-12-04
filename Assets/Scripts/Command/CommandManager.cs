@@ -11,7 +11,11 @@ namespace ChronoHeist.Core
         [SerializeField]
         private InputReader _input;
         
-        private Stack<ICommand> _commandHistory = new Stack<ICommand>();
+        private List<ICommand> _commandHistory = new List<ICommand>();
+
+        private int _historyIndex;
+        public int CurrentIndex => _historyIndex;
+        public int MaxHistoryCount => _commandHistory.Count;
 
         public override void InitializeManager()
         {
@@ -20,28 +24,57 @@ namespace ChronoHeist.Core
         
         public void RegisterCommand(ICommand command)
         {
-            _commandHistory.Push(command);
+            if (_historyIndex < _commandHistory.Count)
+            {
+                _commandHistory.RemoveRange(_historyIndex, _commandHistory.Count - _historyIndex);
+            }
+
+            _commandHistory.Add(command);
+            _historyIndex++;
+        }
+        
+        public void StepBack()
+        {
+            if (_historyIndex > 0)
+            {
+                _historyIndex--;
+                _commandHistory[_historyIndex].Undo();
+            }
+        }
+        
+        public void StepForward()
+        {
+            if (_historyIndex < _commandHistory.Count)
+            {
+                _commandHistory[_historyIndex].Execute(true);
+                _historyIndex++;
+            }
         }
 
-        public void UndoLastCommand()
+        public void ScrubToTurn(int targetIndex)
         {
-            if (_commandHistory.Count > 0)
+            while (_historyIndex > targetIndex)
             {
-                var command = _commandHistory.Pop();
-                command.Undo();
+                StepBack();
+            }
+
+            while (_historyIndex < targetIndex)
+            {
+                StepForward();
             }
         }
 
         public void ClearHistory()
         {
             _commandHistory.Clear();
+            _historyIndex = 0;
         }
 
         private void HandleUndo(InputAction.CallbackContext callbackContext)
         {
             if (TurnManager.Instance.CurrentState == TurnManager.TurnState.PlayerTurn)
             {
-                UndoLastCommand();
+                StepBack();
             }
         }
 

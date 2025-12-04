@@ -24,6 +24,11 @@ public static class EventManager
     {
         
     }
+
+    public struct OnGameLose : IEventType
+    {
+        
+    }
     
     #endregion
 

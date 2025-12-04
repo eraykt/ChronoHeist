@@ -2,7 +2,7 @@ namespace ChronoHeist.Command
 {
     public interface ICommand
     {
-        void Execute();
+        void Execute(bool replay);
         void Undo();
     }
 }

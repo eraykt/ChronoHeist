@@ -94,7 +94,7 @@ namespace ChronoHeist.Core
                 
                 _currentCommandBatch.AddCommand(moveCommand);
                 
-                moveCommand.Execute();
+                moveCommand.Execute(false);
             }
         }
 
@@ -104,7 +104,14 @@ namespace ChronoHeist.Core
             ClearHighlights();
             ChangeState(TurnState.EnemyTurn);
 
-            StartCoroutine(ProcessEnemyTurns());
+            if (CheckCollisionWithEnemy())
+            {
+                Logger.Error(this, "Player collided with enemy!");
+            }
+            else
+            {
+                StartCoroutine(ProcessEnemyTurns());
+            }
 
             //ChangeState(TurnState.PlayerTurn);
             //HighlightAvailableMoves();
@@ -112,6 +119,8 @@ namespace ChronoHeist.Core
         
         private IEnumerator ProcessEnemyTurns()
         {
+            bool isEnded = false;
+            
             foreach (EnemyController enemy in _enemyList)
             {
                 if (enemy == null) continue;
@@ -124,11 +133,20 @@ namespace ChronoHeist.Core
                     enemy, 
                     enemy.CurrentNode, 
                     targetNode, 
-                    () => enemyFinished = true,
+                    () =>
+                    {
+                        enemyFinished = true;
+
+                        isEnded = CheckCollisionWithEnemy();
+                        if (isEnded)
+                        {
+                            Logger.Error(this, "enemy collided with player!!");
+                        }
+                    },
                     null
                     );
                 
-                enemyMove.Execute();
+                enemyMove.Execute(false);
                 _currentCommandBatch.AddCommand(enemyMove);
 
                 yield return new WaitUntil(() => enemyFinished);
@@ -137,11 +155,39 @@ namespace ChronoHeist.Core
             }
             
             CommandManager.Instance.RegisterCommand(_currentCommandBatch);
-            
             ChangeState(TurnState.PlayerTurn);
-            HighlightAvailableMoves();
+
+            if (!isEnded)
+            {
+                HighlightAvailableMoves();
+            }
+            else
+            {
+                EventManager.TriggerEvent(new EventManager.OnGameLose());
+            }
         }
 
+        private bool CheckCollisionWithEnemy()
+        {
+            foreach (EnemyController enemy in _enemyList)
+            {
+                if (_currentPlayer.CurrentNode == enemy.CurrentNode)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void ResumeFromRewind()
+        {
+            Logger.Info(this, "Resuming game from rewind state...");
+    
+            ChangeState(TurnState.PlayerTurn);
+    
+            HighlightAvailableMoves();
+        }
+        
         private bool IsValidMove(GameNode target)
         {
             return _currentPlayer.CurrentNode.neighbors.Contains(target);

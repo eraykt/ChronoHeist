@@ -19,9 +19,9 @@ namespace ChronoHeist.Command
             _onUndoComplete = onUndoComplete;
         }
 
-        public void Execute()
+        public void Execute(bool replay)
         {
-            _currentMoving.MoveToNode(_toNode, _onComplete);
+            _currentMoving.MoveToNode(_toNode, !replay ? _onComplete : null);
         }
 
         public void Undo()
