@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ChronoHeist.Player
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IMovable
     {
         public GameNode CurrentNode { get; private set; }
 

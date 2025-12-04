@@ -18,9 +18,8 @@ namespace ChronoHeist.Core
             _input.GameActions.Undo.performed += HandleUndo;
         }
         
-        public void ExecuteCommand(ICommand command)
+        public void RegisterCommand(ICommand command)
         {
-            command.Execute();
             _commandHistory.Push(command);
         }
 

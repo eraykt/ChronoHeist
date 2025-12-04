@@ -1,31 +1,32 @@
 using ChronoHeist.Node;
-using ChronoHeist.Player;
 
 namespace ChronoHeist.Command
 {
     public class MoveCommand : ICommand
     {
-        private readonly PlayerController _movingPlayer;
+        private readonly IMovable _currentMoving;
         private readonly GameNode _fromNode;
         private readonly GameNode _toNode;
         private readonly System.Action _onComplete;
+        private readonly System.Action _onUndoComplete;
 
-        public MoveCommand(PlayerController movingPlayer, GameNode fromNode, GameNode toNode, System.Action onComplete)
+        public MoveCommand(IMovable currentMoving, GameNode fromNode, GameNode toNode, System.Action onComplete, System.Action onUndoComplete)
         {
-            _movingPlayer = movingPlayer;
+            _currentMoving = currentMoving;
             _fromNode = fromNode;
             _toNode = toNode;
             _onComplete = onComplete;
+            _onUndoComplete = onUndoComplete;
         }
 
         public void Execute()
         {
-            _movingPlayer.MoveToNode(_toNode, _onComplete);
+            _currentMoving.MoveToNode(_toNode, _onComplete);
         }
 
         public void Undo()
         {
-            _movingPlayer.MoveToNode(_fromNode, _onComplete);
+            _currentMoving.MoveToNode(_fromNode, _onUndoComplete);
         }
     }
 }

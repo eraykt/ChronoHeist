@@ -25,6 +25,8 @@ namespace ChronoHeist.Core
 
         private List<GameNode> _highlightedNodes = new List<GameNode>();
 
+        private TurnBatchCommand _currentCommandBatch;
+
         public override void InitializeManager()
         {
             EventManager.RegisterEvent<EventManager.OnPlayerInitialized>(OnPlayerInitialized);
@@ -80,14 +82,19 @@ namespace ChronoHeist.Core
             {
                 ChangeState(TurnState.Execution);
 
+                _currentCommandBatch = new TurnBatchCommand();
+
                 ICommand moveCommand = new MoveCommand(
                     _currentPlayer,
                     _currentPlayer.CurrentNode,
                     targetNode,
-                    OnPlayerMoveCompleted
+                    OnPlayerMoveCompleted,
+                    HighlightAvailableMoves
                 );
-
-                CommandManager.Instance.ExecuteCommand(moveCommand);
+                
+                _currentCommandBatch.AddCommand(moveCommand);
+                
+                moveCommand.Execute();
             }
         }
 
@@ -111,12 +118,25 @@ namespace ChronoHeist.Core
 
                 bool enemyFinished = false;
                 
-                enemy.StartTurn(_currentPlayer.CurrentNode, () => enemyFinished = true);
+                GameNode targetNode = enemy.CalculatePath(_currentPlayer.CurrentNode);
+
+                ICommand enemyMove = new MoveCommand(
+                    enemy, 
+                    enemy.CurrentNode, 
+                    targetNode, 
+                    () => enemyFinished = true,
+                    null
+                    );
+                
+                enemyMove.Execute();
+                _currentCommandBatch.AddCommand(enemyMove);
 
                 yield return new WaitUntil(() => enemyFinished);
 
                 yield return new WaitForSeconds(1.0f);
             }
+            
+            CommandManager.Instance.RegisterCommand(_currentCommandBatch);
             
             ChangeState(TurnState.PlayerTurn);
             HighlightAvailableMoves();

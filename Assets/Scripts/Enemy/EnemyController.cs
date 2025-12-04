@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ChronoHeist.Enemy
 {
-    public class EnemyController : MonoBehaviour
+    public class EnemyController : MonoBehaviour, IMovable
     {
         public GameNode CurrentNode { get; private set; }
         
@@ -15,17 +15,16 @@ namespace ChronoHeist.Enemy
             transform.position = new Vector3(startNode.transform.position.x, 0.0f, startNode.transform.position.z);
         }
 
-        public void StartTurn(GameNode playerNode, System.Action onTurnComplete)
+        public GameNode CalculatePath(GameNode targetNode)
         {
-            List<GameNode> path = Pathfinding.GetPath(CurrentNode, playerNode);
-
+            List<GameNode> path = Pathfinding.GetPath(CurrentNode, targetNode);
             if (path != null && path.Count > 0)
             {
                 GameNode nextStep = path[0];
-                MoveToNode(nextStep, onTurnComplete);
+                return nextStep;                
             }
+            return null;
         }
-        
         
         public void MoveToNode(GameNode targetNode, System.Action onMoveEnded)
         {
