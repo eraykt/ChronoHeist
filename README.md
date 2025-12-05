@@ -76,7 +76,7 @@ To facilitate the Data-Driven workflow, a custom Editor Window was developed.
 ## 📂 Code Structure
 
 The project follows a domain-centric folder structure. Below is the hierarchy from the codebase:
-
+---
 Assets/Scripts/
 ├── Abstracts/     # Interfaces (IMovable)
 ├── Command/       # Command Pattern Logic & Management
@@ -100,7 +100,7 @@ Assets/Scripts/
 ├── UI/            # User Interface Logic (UIManager, Scrubber)
 └── Utilities/     # Helper Classes (Logger, Manager Base, CHRLibrary)
 ---
-
+---
 ## 🚀 Installation & How to Play
 
 1.  Clone the repo: `git clone https://github.com/username/ChronoHeist.git`
