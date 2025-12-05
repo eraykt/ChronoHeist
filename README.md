@@ -64,8 +64,7 @@ A centralized `GameManager` acts as a bootstrapper to handle the "Initialization
 ### Level Node Editor
 To facilitate the Data-Driven workflow, a custom Editor Window was developed.
 
-![Node Editor Screenshot]
-*(Docs/NodeEditor.png)*
+![Node Editor Screenshot](Docs/NodeEditor.png)
 
 * **Features:**
     * **Paint Mode:** Left-click to place nodes, Right-click to remove.
