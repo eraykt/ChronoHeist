@@ -25,9 +25,14 @@ public static class EventManager
         
     }
 
-    public struct OnGameLose : IEventType
+    public struct OnGameEnded : IEventType
     {
-        
+        public bool win;
+
+        public OnGameEnded(bool win)
+        {
+            this.win = win;
+        }
     }
     
     #endregion

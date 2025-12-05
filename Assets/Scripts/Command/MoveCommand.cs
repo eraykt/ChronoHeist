@@ -1,4 +1,6 @@
+using ChronoHeist.Core;
 using ChronoHeist.Node;
+using ChronoHeist.Player;
 
 namespace ChronoHeist.Command
 {
@@ -22,11 +24,21 @@ namespace ChronoHeist.Command
         public void Execute(bool replay)
         {
             _currentMoving.MoveToNode(_toNode, !replay ? _onComplete : null);
+            
+            if (_currentMoving is PlayerController)
+            {
+                GameManager.Instance.StepCount++;
+            }
         }
 
         public void Undo()
         {
             _currentMoving.MoveToNode(_fromNode, _onUndoComplete);
+            
+            if (_currentMoving is PlayerController)
+            {
+                GameManager.Instance.StepCount--;
+            }
         }
     }
 }

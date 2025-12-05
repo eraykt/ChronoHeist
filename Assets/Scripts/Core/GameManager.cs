@@ -9,17 +9,23 @@ namespace ChronoHeist.Core
         [Header("Input")]
         [SerializeField]
         private InputReader _input;
-        
+
         [Header("Managers")]
         [Tooltip("The managers that are initialized by order")]
         [SerializeField]
         private List<Manager> _managersToInitialize;
 
-        
+
+        public int StepCount { get; set; }
+
+        public int MaxGoldCount { get; set; }
+
+        public int CollectedGold { get; set; }
+
         public override void InitializeManager()
         {
             _input.EnableInput();
-            
+
             foreach (var manager in _managersToInitialize)
             {
                 manager.InitializeManager();
@@ -28,7 +34,7 @@ namespace ChronoHeist.Core
 
         private void Start()
         {
-            InitializeManager();            
+            InitializeManager();
         }
     }
 }

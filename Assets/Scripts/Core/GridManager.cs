@@ -27,9 +27,13 @@ namespace ChronoHeist.Core
         private GameObject _playerPrefab;
         [SerializeField]
         private GameObject _enemyPrefab;
+        [SerializeField]
+        private GameObject _goldPrefab;
+        [SerializeField]
+        private GameObject _exitPrefab;
 
         private Transform _gridContainer;
-        
+
         private GridCellData[,] _runtimeGrid;
 
         private Dictionary<Vector2Int, GameNode> _nodeLookup = new Dictionary<Vector2Int, GameNode>();
@@ -45,7 +49,7 @@ namespace ChronoHeist.Core
                 Logger.Error(this, "Node Data SO is null");
             }
         }
-        
+
         private void GenerateGrid()
         {
             _nodeLookup.Clear();
@@ -54,7 +58,7 @@ namespace ChronoHeist.Core
 
             GameObject gridContainer = new GameObject("GridContainer");
             _gridContainer = gridContainer.transform;
-            
+
             for (int x = 0; x < _nodeDataSo.width; x++)
             {
                 for (int y = 0; y < _nodeDataSo.height; y++)
@@ -64,7 +68,7 @@ namespace ChronoHeist.Core
             }
 
             ConnectNodesDfs();
-            
+
             EventManager.TriggerEvent(new EventManager.OnGridGenerationFinished());
         }
 
@@ -160,19 +164,39 @@ namespace ChronoHeist.Core
                 instance.transform.rotation = Quaternion.Euler(0, angle, 0);
             }
 
-            if (_runtimeGrid[x,y].Contents.Count > 0)
+            if (_runtimeGrid[x, y].Contents.Count > 0)
             {
-                if (_runtimeGrid[x,y].ContainsContent(CellContent.PlayerSpawn))
+                if (_runtimeGrid[x, y].ContainsContent(CellContent.PlayerSpawn))
                 {
                     var player = Instantiate(_playerPrefab).GetComponent<PlayerController>();
                     player.Initialize(instance?.GetComponent<GameNode>());
                 }
 
-                if (_runtimeGrid[x,y].ContainsContent(CellContent.EnemySpawn))
+                if (_runtimeGrid[x, y].ContainsContent(CellContent.EnemySpawn))
                 {
                     var enemy = Instantiate(_enemyPrefab).GetComponent<EnemyController>();
                     enemy.Initialize(instance?.GetComponent<GameNode>());
                     TurnManager.Instance.RegisterEnemy(enemy);
+                }
+
+                if (_runtimeGrid[x, y].ContainsContent(CellContent.Gold))
+                {
+                    GameObject itemObj = Instantiate(_goldPrefab, position, Quaternion.identity, _gridContainer);
+
+                    GameNode nodeScript = instance?.GetComponent<GameNode>();
+                    nodeScript.OccupyingItem = itemObj;
+
+                    GameManager.Instance.MaxGoldCount++;
+                }
+                
+                if (_runtimeGrid[x, y].ContainsContent(CellContent.ExitPoint))
+                {
+                    Instantiate(_exitPrefab, position, Quaternion.identity, _gridContainer);
+
+                    if (instance != null && instance.TryGetComponent(out GameNode gameNode))
+                    {
+                        gameNode.IsExit = true;
+                    }
                 }
             }
         }

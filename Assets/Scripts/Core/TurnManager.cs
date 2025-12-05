@@ -15,7 +15,7 @@ namespace ChronoHeist.Core
             PlayerTurn,
             EnemyTurn,
             Execution,
-            Pause
+            LevelCompleted
         }
 
         public TurnState CurrentState { get; private set; }
@@ -95,6 +95,13 @@ namespace ChronoHeist.Core
                 _currentCommandBatch.AddCommand(moveCommand);
                 
                 moveCommand.Execute(false);
+
+                if (targetNode.OccupyingItem && targetNode.OccupyingItem.activeSelf)
+                {
+                    ICommand collectCommand = new CollectCommand(targetNode.OccupyingItem);
+                    collectCommand.Execute(false);
+                    _currentCommandBatch.AddCommand(collectCommand);
+                }
             }
         }
 
@@ -102,19 +109,34 @@ namespace ChronoHeist.Core
         {
             Logger.Success(this, "Player Moved");
             ClearHighlights();
+            if (CheckExitCondition()) return;
+            
             ChangeState(TurnState.EnemyTurn);
 
             if (CheckCollisionWithEnemy())
             {
                 Logger.Error(this, "Player collided with enemy!");
+                EventManager.TriggerEvent(new EventManager.OnGameEnded(false));
             }
             else
             {
                 StartCoroutine(ProcessEnemyTurns());
             }
-
-            //ChangeState(TurnState.PlayerTurn);
-            //HighlightAvailableMoves();
+        }
+        
+        private bool CheckExitCondition()
+        {
+            if (_currentPlayer.CurrentNode != null && _currentPlayer.CurrentNode.IsExit)
+            {
+                Logger.Success(this, "LEVEL COMPLETED!");
+        
+                ChangeState(TurnState.LevelCompleted);
+        
+                EventManager.TriggerEvent(new EventManager.OnGameEnded(true));
+        
+                return true;
+            }
+            return false;
         }
         
         private IEnumerator ProcessEnemyTurns()
@@ -151,7 +173,7 @@ namespace ChronoHeist.Core
 
                 yield return new WaitUntil(() => enemyFinished);
 
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(0.2f);
             }
             
             CommandManager.Instance.RegisterCommand(_currentCommandBatch);
@@ -163,7 +185,7 @@ namespace ChronoHeist.Core
             }
             else
             {
-                EventManager.TriggerEvent(new EventManager.OnGameLose());
+                EventManager.TriggerEvent(new EventManager.OnGameEnded(false));
             }
         }
 

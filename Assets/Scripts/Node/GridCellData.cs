@@ -40,7 +40,9 @@ namespace ChronoHeist.Node
     public enum CellContent
     {
         PlayerSpawn,
-        EnemySpawn
+        EnemySpawn,
+        Gold,
+        ExitPoint
     }
 
     

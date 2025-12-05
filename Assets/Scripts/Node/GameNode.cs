@@ -8,6 +8,10 @@ namespace ChronoHeist.Node
         public Vector2Int index;
         
         public List<GameNode> neighbors = new List<GameNode>();
+        
+        public GameObject OccupyingItem { get; set; }
+        
+        public bool IsExit { get; set; } = false;
 
         [Header("Visuals")]
         [SerializeField]

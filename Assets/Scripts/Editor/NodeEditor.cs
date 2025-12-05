@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 using ChronoHeist.Node;
 using UnityEngine;
@@ -202,6 +203,16 @@ public class NodeEditor : EditorWindow
                         labelText = "E";
                         labelColor = Color.red;
                         drawPos += new Vector2(offset, -offset);
+                        break;
+                    case CellContent.Gold:
+                        labelText = "G";
+                        labelColor = Color.yellow;
+                        drawPos += new Vector2(-offset, offset);
+                        break;
+                    case CellContent.ExitPoint:
+                        labelText = "E";
+                        labelColor = Color.green;
+                        drawPos += new Vector2(offset, offset);
                         break;
                 }
 
