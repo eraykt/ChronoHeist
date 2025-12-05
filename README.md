@@ -75,20 +75,20 @@ To facilitate the Data-Driven workflow, a custom Editor Window was developed.
 
 ## 📂 Code Structure
 
-The project follows a domain-centric folder structure:
+The project follows a domain-centric folder structure. Below is the hierarchy from the codebase:
 
 Assets/Scripts/
 ├── Abstracts/     # Interfaces (IMovable)
 ├── Command/       # Command Pattern Logic & Management
-│   ├── CommandManager.cs  # Command history and time scrubbing
+│   ├── CommandManager.cs  # History management
 │   ├── ICommand.cs        # Command contract
-│   ├── MoveCommand.cs     # Movement command
+│   ├── MoveCommand.cs     # Movement logic
 │   ├── CollectCommand.cs  # Item collection command
 │   └── TurnBatchCommand.cs # Composite command for a full turn's actions
 ├── Core/          # Central Managers & Core Systems
 │   ├── GameManager.cs     # Bootstrapper and high-level control
 │   ├── GridManager.cs     # Grid/Level generation
-│   ├── TurnManager.cs     # Turn loop and State Machine
+│   ├── TurnManager.cs     # Game loop and State Machine
 │   ├── SelectionManager.cs # Input-to-World interaction
 │   ├── EventManager.cs    # Decoupled communication system
 │   └── Pathfinding.cs     # BFS Algorithm (Static)
@@ -99,7 +99,6 @@ Assets/Scripts/
 ├── Player/        # Player Controller
 ├── UI/            # User Interface Logic (UIManager, Scrubber)
 └── Utilities/     # Helper Classes (Logger, Manager Base, CHRLibrary)
-
 ---
 
 ## 🚀 Installation & How to Play
@@ -110,7 +109,7 @@ Assets/Scripts/
 4.  Press **Play**.
 5.  **Controls:**
     * **Left Click:** Move / Interact.
-    * **Z:** Quick Undo.
+    * **1:** Quick Undo.
     * **UI Slider:** Scrub through time timeline.
 
 ---
