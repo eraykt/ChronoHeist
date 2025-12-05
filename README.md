@@ -79,26 +79,26 @@ The project follows a domain-centric folder structure:
 
 Assets/Scripts/
 ├── Abstracts/     # Interfaces (IMovable)
-├── Command/       # Command Pattern Logic & Manager
-│   ├── CommandManager.cs  # History management
+├── Command/       # Command Pattern Logic & Management
+│   ├── CommandManager.cs  # Command history and time scrubbing
 │   ├── ICommand.cs        # Command contract
-│   ├── MoveCommand.cs     # Movement logic
-│   ├── CollectCommand.cs  # Item collection logic
-│   └── TurnBatchCommand.cs # Composite command for full turns
+│   ├── MoveCommand.cs     # Movement command
+│   ├── CollectCommand.cs  # Item collection command
+│   └── TurnBatchCommand.cs # Composite command for a full turn's actions
 ├── Core/          # Central Managers & Core Systems
-│   ├── GameManager.cs     # Bootstrapper
-│   ├── GridManager.cs     # Level generation
-│   ├── TurnManager.cs     # Game loop & State Machine
-│   ├── SelectionManager.cs # Input to World interaction
-│   ├── EventManager.cs    # Decoupled communication
+│   ├── GameManager.cs     # Bootstrapper and high-level control
+│   ├── GridManager.cs     # Grid/Level generation
+│   ├── TurnManager.cs     # Turn loop and State Machine
+│   ├── SelectionManager.cs # Input-to-World interaction
+│   ├── EventManager.cs    # Decoupled communication system
 │   └── Pathfinding.cs     # BFS Algorithm (Static)
 ├── Editor/        # Custom Editor Tools (NodeEditor)
 ├── Enemy/         # AI Logic (EnemyController)
 ├── Input/         # Input System wrapper (InputReader)
 ├── Node/          # Grid data structures (GameNode, GridCellData, NodeDataSO)
 ├── Player/        # Player Controller
-├── UI/            # UI logic (UIManager)
-└── Utilities/     # Helpers (Logger, Manager Base, CHRLibrary)
+├── UI/            # User Interface Logic (UIManager, Scrubber)
+└── Utilities/     # Helper Classes (Logger, Manager Base, CHRLibrary)
 
 ---
 
